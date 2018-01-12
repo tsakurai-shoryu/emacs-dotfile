@@ -249,6 +249,9 @@
 (define-key global-map (kbd "C-x C-f") 'helm-find-files)
 (define-key global-map (kbd "C-x b")   'helm-buffers-list)
 
+;;helm-swoop
+(require 'helm-swoop)
+
 ;cua-mode設定
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
@@ -305,7 +308,7 @@
   (interactive)
   (pop-to-buffer (make-ruby-scratch-buffer)))
 (defun ruby-mode-hook-rcodetools ()
-  (define-key ruby-mode-map "\C-c\C-z" 'rct-complete-symbol)
+  (define-key ruby-mode-map "\C-c\C-w" 'rct-complete-symbol)
   (define-key ruby-mode-map "\C-c\C-t" 'ruby-toggle-buffer)
   (define-key ruby-mode-map "\C-c\C-d" 'xmp)
   (define-key ruby-mode-map "\C-c\C-f" 'rct-ri))
@@ -319,3 +322,4 @@
 ;; (require 'pcre2el)
 (define-key global-map (kbd "M-%") 'vr/query-replace)
 
+ 
