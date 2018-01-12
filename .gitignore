@@ -1,0 +1,6 @@
+history
+recentf
+/tmp/*
+!/tmp/.gitkeep
+/
+auto-save-list/
