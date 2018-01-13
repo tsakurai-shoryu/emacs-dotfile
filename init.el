@@ -146,14 +146,14 @@
   (ecb-redraw-layout)
   (calendar))
 
-(let ((ws window-system))
-  (cond ((eq ws 'w32)
-         (set-frame-position (selected-frame) 0 0)
-         (setq term-setup-hook 'jbr-init)
-         (setq window-setup-hook 'jbr-init))
-        ((eq ws 'ns)
-         (set-frame-position (selected-frame) 0 0)
-         (set-frame-size (selected-frame) 100 50))))
+;;(let ((ws window-system))
+;;  (cond ((eq ws 'w32)
+;;         (set-frame-position (selected-frame) 0 0)
+;;         (setq term-setup-hook 'jbr-init)
+;;         (setq window-setup-hook 'jbr-init))
+;;        ((eq ws 'ns)
+;;         (set-frame-position (selected-frame) 0 0)
+;;         (set-frame-size (selected-frame) 100 50))))
 
 ;;バックスペースキー割り当て
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
@@ -276,7 +276,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -354,3 +354,7 @@
 ;; undo-tree
 (require 'undo-tree)
 (global-undo-tree-mode)
+
+;; ace jump mode
+(require 'ace-jump-mode)
+(define-key global-map (kbd "C-c s") 'ace-jump-mode)
