@@ -271,7 +271,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -346,3 +346,6 @@
 ;; (require 'pcre2el)
 (define-key global-map (kbd "M-%") 'vr/query-replace)
 
+;; undo-tree
+(require 'undo-tree)
+(global-undo-tree-mode)
