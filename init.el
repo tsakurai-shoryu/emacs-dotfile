@@ -16,9 +16,8 @@
 ;; 2つ以上フォルダを指定する場合の引数 => (add-to-load-path "elisp" "xxx" "xxx")
 (add-to-load-path "elisp")
 
-
-(let ((envs '("PATH")))
-  (exec-path-from-shell-copy-envs envs))
+;;環境変数PATHを取得
+(setq exec-path (parse-colon-path (getenv "PATH")))
 
 ;; ------------------------------------------------------------------------
 ;; @ general
@@ -240,6 +239,14 @@
  ;; \の代わりにバックスラッシュを入力する
 (define-key global-map [?¥] [?\\]) 
 
+;;company
+(require 'company)
+(global-company-mode) ; 全バッファで有効にする 
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+
+
 ;helmの設定
 (require 'helm-config)
 (helm-mode 1)
@@ -264,7 +271,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -286,6 +293,17 @@
 ; 自動かっことじ
 (electric-pair-mode 1)
 
+
+;; rbenv
+(require 'rbenv)
+(global-rbenv-mode)
+(setq rbenv-installation-dir "~/.rbenv")
+
+;; inf-ruby
+(require 'inf-ruby)
+(setq inf-ruby-default-implementation "pry")
+(setq inf-ruby-eval-binding "Pry.toplevel_binding")
+(add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on)
 
 ; ruby-electric
 (require 'ruby-electric)
@@ -314,6 +332,12 @@
   (define-key ruby-mode-map "\C-c\C-f" 'rct-ri))
 (add-hook 'ruby-mode-hook 'ruby-mode-hook-rcodetools)
 
+;;robe
+(add-hook 'ruby-mode-hook 'robe-mode)
+(eval-after-load 'company
+  '(push 'company-robe company-backends))
+
+
 ;; 正規表現
 (require 'visual-regexp-steroids)
 (setq vr/engine 'python) ; 'python, 'pcre2el, or 'emacs
@@ -322,4 +346,3 @@
 ;; (require 'pcre2el)
 (define-key global-map (kbd "M-%") 'vr/query-replace)
 
- 
