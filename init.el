@@ -5,6 +5,7 @@
 ;; ・rcodetoolsのgemが入っているか、pathが通っているか
 ;; ・rbenvがインストールされているか
 ;; ・robe用にpry,pry-doc,method_sourceが入っているか
+;; ・jedi用にvirtualenvが入っているか(インストールはpipでよい)
 ;; ------------------------------------------------------------------------
 ;; @ load-path
 
@@ -276,7 +277,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (company-jedi ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -341,6 +342,14 @@
 (add-hook 'ruby-mode-hook 'robe-mode)
 (eval-after-load 'company
   '(push 'company-robe company-backends))
+
+;;python用company
+(add-to-list 'exec-path "~/.pyenv/shims")
+(require 'jedi-core)
+(setq jedi:complete-on-dot t)
+(setq jedi:use-shortcuts t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-to-list 'company-backends 'company-jedi) ; backendに追加
 
 
 ;; 正規表現
