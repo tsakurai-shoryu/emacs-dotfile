@@ -277,7 +277,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-jedi ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (auto-save-buffers-enhanced multi-term company-jedi ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -367,3 +367,51 @@
 ;; ace jump mode
 (require 'ace-jump-mode)
 (define-key global-map (kbd "C-c s") 'ace-jump-char-mode)
+
+
+;; より下に記述した物が PATH の先頭に追加されます
+(dolist (dir (list
+              "/sbin"
+              "/usr/sbin"
+              "/bin"
+              "/usr/bin"
+              "/opt/local/bin"
+              "/sw/bin"
+              "/usr/local/bin"
+              (expand-file-name "~/bin")
+              (expand-file-name "~/.emacs.d/bin")
+              ))
+ ;; PATH と exec-path に同じ物を追加します
+ (when (and (file-exists-p dir) (not (member dir exec-path)))
+   (setenv "PATH" (concat dir ":" (getenv "PATH")))
+   (setq exec-path (append (list dir) exec-path))))
+
+;;multi-term
+(setq multi-term-program "/bin/bash")
+(require 'multi-term)
+
+;;auto-save-buffers-enhanced
+(require 'auto-save-buffers-enhanced)
+
+;;; 1秒後に保存
+(setq auto-save-buffers-enhanced-interval 1)
+;;; 特定のファイルのみ有効にする
+(setq auto-save-buffers-enhanced-include-regexps '(".+")) ;全ファイル
+;; not-save-fileと.ignoreは除外する
+(setq auto-save-buffers-enhanced-exclude-regexps '("^not-save-file" "\\.ignore$"))
+;;; Wroteのメッセージを抑制
+(setq auto-save-buffers-enhanced-quiet-save-p t)
+;;; *scratch*も ~/.emacs.d/scratch に自動保存
+(setq auto-save-buffers-enhanced-save-scratch-buffer-to-file-p t)
+(setq auto-save-buffers-enhanced-file-related-with-scratch-buffer
+      (locate-user-emacs-file "scratch"))
+(auto-save-buffers-enhanced t)
+
+;;; C-x a sでauto-save-buffers-enhancedの有効・無効をトグル
+(global-set-key "\C-xas" 'auto-save-buffers-enhanced-toggle-activity)
+
+
+;; Disable make backup file
+(setq make-backup-files nil)
+;; Disable auto save
+(setq auto-save-default nil)
