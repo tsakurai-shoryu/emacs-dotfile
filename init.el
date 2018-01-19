@@ -215,7 +215,7 @@
 
 ;;quickrun設定
 (require 'quickrun)
-(define-key global-map [f5] 'my-quickrun-output-fix)
+(define-key global-map (kbd "C-c q") 'my-quickrun-output-fix)
 (push '("*quickrun*") popwin:special-display-config)
 (defun my-quickrun-output-fix ()
   (interactive)
@@ -277,7 +277,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auto-save-buffers-enhanced multi-term company-jedi ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
+    (0blayout auto-save-buffers-enhanced multi-term company-jedi ace-jump-mode undo-tree rbenv robe helm-robe company auto-complete exec-path-from-shell pcre2el visual-regexp-steroids multiple-cursors helm-swoop ruby-electric quickrun helm-git helm)))
  '(ruby-insert-encoding-magic-comment nil))
 
 ;外部で変更があった場合自動で読み込む
@@ -415,3 +415,13 @@
 (setq make-backup-files nil)
 ;; Disable auto save
 (setq auto-save-default nil)
+
+
+;; キーバインドを正す
+(setq 0blayout-mode-map (make-sparse-keymap))
+(define-key 0blayout-mode-map (kbd "C-c l c") '0blayout-new)
+(define-key 0blayout-mode-map (kbd "C-c l k") '0blayout-kill)
+(define-key 0blayout-mode-map (kbd "C-c l b") '0blayout-switch)
+(0blayout-mode 1)
+
+
