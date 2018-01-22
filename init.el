@@ -393,15 +393,15 @@
 ;;auto-save-buffers-enhanced
 (require 'auto-save-buffers-enhanced)
 
-;;; 1秒後に保存
-(setq auto-save-buffers-enhanced-interval 1)
-;;; 特定のファイルのみ有効にする
-(setq auto-save-buffers-enhanced-include-regexps '(".+")) ;全ファイル
-;; not-save-fileと.ignoreは除外する
+; 1秒後に保存
+(setq auto-save-buffers-enhanced-interval 0.5)
+; 特定のファイルのみ有効にする
+;(setq auto-save-buffers-enhanced-include-regexps '(".+")) ;全ファイル
+; not-save-fileと.ignoreは除外する
 (setq auto-save-buffers-enhanced-exclude-regexps '("^not-save-file" "\\.ignore$"))
-;;; Wroteのメッセージを抑制
-(setq auto-save-buffers-enhanced-quiet-save-p t)
-;;; *scratch*も ~/.emacs.d/scratch に自動保存
+;; Wroteのメッセージを抑制(現在のバージョンではバグがある)
+;(setq auto-save-buffers-enhanced-quiet-save-p t)
+;; *scratch*も ~/.emacs.d/scratch に自動保存
 (setq auto-save-buffers-enhanced-save-scratch-buffer-to-file-p t)
 (setq auto-save-buffers-enhanced-file-related-with-scratch-buffer
       (locate-user-emacs-file "scratch"))
@@ -419,9 +419,39 @@
 
 ;; キーバインドを正す
 (setq 0blayout-mode-map (make-sparse-keymap))
-(define-key 0blayout-mode-map (kbd "C-c l c") '0blayout-new)
-(define-key 0blayout-mode-map (kbd "C-c l k") '0blayout-kill)
-(define-key 0blayout-mode-map (kbd "C-c l b") '0blayout-switch)
+;(define-key 0blayout-mode-map (kbd "C-c l c") '0blayout-new)
+;(define-key 0blayout-mode-map (kbd "C-c l k") '0blayout-kill)
+;(define-key 0blayout-mode-map (kbd "C-c l b") '0blayout-switch)
 (0blayout-mode 1)
 
+
+;; window resize
+(defun window-resizer ()
+  "Control window size and position."
+  (interactive)
+  (let ((window-obj (selected-window))
+        (current-width (window-width))
+        (current-height (window-height))
+        (dx (if (= (nth 0 (window-edges)) 0) 1
+              -1))
+        (dy (if (= (nth 1 (window-edges)) 0) 1
+              -1))
+        c)
+    (catch 'end-flag
+      (while t
+        (message "size[%dx%d]"
+                 (window-width) (window-height))
+        (setq c (read-char))
+        (cond ((= c ?f)
+               (enlarge-window-horizontally dx))
+              ((= c ?b)
+               (shrink-window-horizontally dx))
+              ((= c ?n)
+               (enlarge-window dy))
+              ((= c ?p)
+               (shrink-window dy))
+              ;; otherwise
+              (t
+               (message "Quit")
+               (throw 'end-flag t)))))))
 
